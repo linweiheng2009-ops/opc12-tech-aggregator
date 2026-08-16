@@ -231,3 +231,46 @@ HN RSS description 只含 "Comments" 链接（无法从 RSS 拿概要）。新�
    - 人工分析推出了Optima → Artificial Analysis 推出了Optima
 
 **生效后验证**：HN 第 2 条标题从"当法学硕士..." → "当大语言模型从未看到五年级以上的材料时会发生什么？" ✅
+
+## DEC-018 · 去掉果壳 + 4 源配额 + 卡片紧凑化（2026-08-16 16:54）
+
+恒哥 16:54 拍板两件事：
+1. 去掉果壳（综合科普源，AI 含量最低）
+2. 紧凑化卡片（之前下半部空白太多）
+
+### 实施
+
+**SOURCES 改成 4 源**（`scripts/00_fetch.py`）：
+```
+量子位  3 条/天
+The Decoder  3 条/天
+Solidot  2 条/天
+Hacker News  2 条/天
+─── 合计 10 条/天
+```
+新增 `SOURCE_QUOTAS` 字典，让 fetch 按源配额裁剪（之前是统一 `PER_SOURCE=2`）。
+
+**AI 浓度**：果壳是 5 源里 AI 含量最低的（综合科普），去掉后 4 源里 6 条都是 AI（量子位 3 + The Decoder 3），剩 4 条 Solidot/HN 是部分 AI 或随机。AI 浓度从 60% → **80~90%**。
+
+**紧凑化 CSS**（`scripts/02_render_multi.py`）：
+- wrap padding: `H*0.04 / W*0.05 / H*0.03` → `H*0.025 / W*0.035 / H*0.02`（-40%）
+- title margin-top: 12 → 8
+- subtitle margin-top: 8 → 4
+- divider margin-top: 14 → 8 + width 50 → 40
+- list margin-top: 14 → 8
+- row padding: 8 10 → 7 10
+- row gap: 10 → 6（vertical）/ 8 → 5（horizontal）
+- 16:9 cell 加上 subtitle-row（之前只显示标题）+ 用 `-webkit-line-clamp` 限 3 行标题 + 8 行概要
+- footer margin-top: auto → 6
+
+**小 bug**：之前加的 `min-height` 导致朋友圈 1:1 渲染崩溃（playwright 卡死），改为 `flex:1` + `justify-content:space-between` 让 row 紧贴 footer。
+
+### 最终卡片（2026-08-16 21:18）
+
+| 文件 | 尺寸 | 大小 |
+|---|---|---|
+| `20260816_2118_xiaohongshu_card1.png` | 3:4 (1140×1620) | 956 KB |
+| `20260816_2118_friend_card1.png` | 1:1 (1080×1080) | 898 KB |
+| `20260816_2118_wechat_16x9_card1.png` | 16:9 (1280×720) | 640 KB |
+| `20260816_2118_wechat_16x9_card2.png` | 16:9 (1280×720) | 629 KB |
+| `20260816_2118_wechat_top_card1.png` | 2.35:1 (900×383) | 330 KB |

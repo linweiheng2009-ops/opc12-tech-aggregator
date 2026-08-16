@@ -1,17 +1,12 @@
 {
   "date": "2026-08-16",
-  "generated_at": "2026-08-16T16:12:11",
+  "generated_at": "2026-08-16T16:56:24",
   "total": 10,
   "sources": [
     {
-      "source": "guokr",
-      "label": "果壳",
-      "count": 2
-    },
-    {
       "source": "qbitai",
       "label": "量子位",
-      "count": 2
+      "count": 3
     },
     {
       "source": "solidot",
@@ -21,7 +16,7 @@
     {
       "source": "thdecoder",
       "label": "The Decoder",
-      "count": 2
+      "count": 3
     },
     {
       "source": "hn",
@@ -30,22 +25,6 @@
     }
   ],
   "items": [
-    {
-      "source": "guokr",
-      "label": "果壳",
-      "color": "#83C176",
-      "title": "别再去西餐厅当冤大头！居家实现高端肉食自由，所有人都可以把西餐厅顶配餐食搬回家",
-      "url": "https://www.guokr.com/article/469931",
-      "subtitle": "不知道大家有没有这样的困惑。 忙碌的工作日结束之后，总想在家吃上一顿安心又惊艳的肉食大餐。可现实总是屡屡碰壁：专程去到高端西餐厅，一份 M9 和牛上脑牛排动辄几大百起步。"
-    },
-    {
-      "source": "guokr",
-      "label": "果壳",
-      "color": "#83C176",
-      "title": "AI 满篇的“不是……而是……”，我开始不敢写了",
-      "url": "https://www.guokr.com/article/469930",
-      "subtitle": "有多少人快被 AI 满嘴的“不是……而是……”逼疯了？"
-    },
     {
       "source": "qbitai",
       "label": "量子位",
@@ -61,6 +40,14 @@
       "title": "牛来！A社营收暴涨1400%，最新季度入账115亿美元",
       "url": "https://www.qbitai.com/2026/08/473947.html",
       "subtitle": "将超越马斯克的SpaceX，成为史上上市估值最高的IPO。"
+    },
+    {
+      "source": "qbitai",
+      "label": "量子位",
+      "color": "#FF6B35",
+      "title": "至知研究院提出大模型可解释性新路线：拆权重，数据成本不到1%",
+      "url": "https://www.qbitai.com/2026/08/473876.html",
+      "subtitle": "理解大模型，无需再训练一个替代网络"
     },
     {
       "source": "solidot",
@@ -82,33 +69,41 @@
       "source": "thdecoder",
       "label": "The Decoder",
       "color": "#9D4EDD",
-      "title": "Anthropic 的生物武器过滤器关闭了近一年，暴露了 1.33亿个请求",
-      "url": "https://the-decoder.com/anthropics-bio-weapons-filter-was-down-for-nearly-a-year-exposing-133-million-requests/",
-      "subtitle": "在一份安全报告中Anthropic透露择其生物和化学武器风险的内部过滤系统已停用近一年。在此期间的"
+      "title": "OpenAI dissolved the team built to catch catastrophic AI risks, reassigning its work to other groups",
+      "url": "https://the-decoder.com/openai-dissolved-the-team-built-to-catch-catastrophic-ai-risks-reassigning-its-work-to-other-groups/",
+      "subtitle": "OpenAI shut down its \"Preparedness\" team, which evaluated whether the company's own AI models could pose catastrophic risks. The work has been parceled out to e"
     },
     {
       "source": "thdecoder",
       "label": "The Decoder",
       "color": "#9D4EDD",
-      "title": "Optima通过让用户根据自己的数据测试模型来解决人工智能基准测试的最大缺陷",
+      "title": "Anthropic's bio-weapons filter was down for nearly a year, exposing 133 million requests",
+      "url": "https://the-decoder.com/anthropics-bio-weapons-filter-was-down-for-nearly-a-year-exposing-133-million-requests/",
+      "subtitle": "In a safety report, Anthropic reveals that its internal filtering system for biological and chemical weapons risks was inactive for nearly a year. During that t"
+    },
+    {
+      "source": "thdecoder",
+      "label": "The Decoder",
+      "color": "#9D4EDD",
+      "title": "Optima tackles AI benchmarking's biggest flaw by letting users test models against their own data",
       "url": "https://the-decoder.com/optima-tackles-ai-benchmarkings-biggest-flaw-by-letting-users-test-models-against-their-own-data/",
-      "subtitle": "Artificial Analysis 推出了Optima，这是一个允许用户根据自己的数据和工作流构建自定义 AI基准的平台。模型可以进行比较 ，而不是 jus"
+      "subtitle": "Artificial Analysis has launched Optima, a platform that lets users build custom AI benchmarks from their own data and workflows. Models can be compared not jus"
     },
     {
       "source": "hn",
       "label": "Hacker News",
       "color": "#FF6600",
-      "title": "当大语言模型从未看到五年级以上的材料时会发生什么？",
-      "url": "https://littlelearner-ll.github.io/",
-      "subtitle": ""
-    },
-    {
-      "source": "hn",
-      "label": "Hacker News",
-      "color": "#FF6600",
-      "title": "华硕自行车动力增强器",
+      "title": "Asus Bike Booster",
       "url": "https://www.asus.com/accessories/bike-booster/asus-oxiis/oxiis-intelligent-bike-booster/",
-      "subtitle": "华硕Oxiis E250G1通过 500W峰值增压、 50公里环保续航里程、应用程序控制、快速 USB-C充电和现在轻松安装为骑手改造任何自行车"
+      "subtitle": "ASUS Oxiis E250G1 transforms any bike with 500W peak boost, 50 km eco range, app control, fast USB-C charging, and easy install now for riders"
+    },
+    {
+      "source": "hn",
+      "label": "Hacker News",
+      "color": "#FF6600",
+      "title": "Asynchronous I/O in DuckDB: Work, Thread, Work",
+      "url": "https://duckdb.org/2026/07/31/asynchronous-io",
+      "subtitle": "Starting with v2.0, scheduled for fall 2026, DuckDB will support asynchronous reads of Parquet and CSV files. This can significantly speed up queries when synch"
     }
   ]
 }

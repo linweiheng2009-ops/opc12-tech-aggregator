@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """
-OPC12 科技聚合 · 抓取 5 源 × 2 条 = 10 条/天
-输入：5 个源（RSS / JSON API / Playwright 首页）
+OPC12 科技聚合 · 抓取 4 源（果壳已去掉）· 总量 10 条/天
+DEC-018 · 2026-08-16 拍板：去掉果壳后采用 3+3+2+2 不均分布（AI 浓度 100%）
+
+输入：4 个源（RSS）
 输出：data/YYYY-MM-DD.json (10 条)
 """
 import json, re, sys, traceback
@@ -13,17 +15,17 @@ import xml.etree.ElementTree as ET
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
 
-# 5 源配置（DEC-013 · 2026-08-16 拍板 3 个 AI 源）
+# 4 源配置（DEC-018 · 去掉果壳）
+# 每源条数：AI 浓度高的多取，AI 浓度低的少取
+# 量子位 3 + The Decoder 3 + Solidot 2 + HN 2 = 10
+SOURCE_QUOTAS = {
+    "qbitai": 3,
+    "thdecoder": 3,
+    "solidot": 2,
+    "hn": 2,
+}
+
 SOURCES = [
-    {
-        "id": "guokr",
-        "label": "果壳",
-        "color": "#83C176",
-        "type": "playwright_list_with_detail",
-        "list_url": "https://www.guokr.com/",
-        "selector": 'a[href*="/article/"]',
-        "detail_desc_sel": 'meta[name="description"]',
-    },
     {
         "id": "qbitai",
         "label": "量子位",
@@ -51,12 +53,12 @@ SOURCES = [
         "id": "hn",
         "label": "Hacker News",
         "color": "#FF6600",
-        "type": "rss_hn",  # HN 描述需要清洗 HTML
+        "type": "rss_hn",
         "url": "https://news.ycombinator.com/rss",
     },
 ]
 
-PER_SOURCE = 2  # 每源 2 条 = 10 条/天
+PER_SOURCE = 2  # 默认每源 2 条（个别源用 SOURCE_QUOTAS 覆盖）
 FETCH_TIMEOUT = 25
 
 # ──── 抓取器 ──────────────────────────────────────────
@@ -66,7 +68,7 @@ def fetch_url(url, timeout=FETCH_TIMEOUT):
     with urllib.request.urlopen(req, timeout=timeout) as r:
         return r.read()
 
-def fetch_rss(src):
+def fetch_rss(src, limit=PER_SOURCE):
     """RSS 抓取（量子位 / Solidot / The Decoder）"""
     xml_text = fetch_url(src["url"])
     root = ET.fromstring(xml_text)
@@ -93,11 +95,11 @@ def fetch_rss(src):
             "url": link,
             "subtitle": desc,
         })
-        if len(items) >= PER_SOURCE:
+        if len(items) >= limit:
             break
     return items
 
-def fetch_rss_hn(src):
+def fetch_rss_hn(src, limit=PER_SOURCE):
     """Hacker News RSS（描述仅 "Comments" 链接，需自行用 OG description 抓取或留空）"""
     xml_text = fetch_url(src["url"])
     root = ET.fromstring(xml_text)
@@ -125,7 +127,7 @@ def fetch_rss_hn(src):
             "url": link,
             "subtitle": desc,  # HN 没 description，留空（后续 enrich_og 补）
         })
-        if len(items) >= PER_SOURCE:
+        if len(items) >= limit:
             break
     return items
 
@@ -297,16 +299,17 @@ def main():
     all_items = []
     summary = []
     for src in SOURCES:
-        print(f"📡 {src['label']:<6}", end=" ", flush=True)
+        quota = SOURCE_QUOTAS.get(src["id"], PER_SOURCE)
+        print(f"📡 {src['label']:<6}（{quota} 条）", end=" ", flush=True)
         try:
             if src["type"] == "rss":
-                items = fetch_rss(src)
+                items = fetch_rss(src, limit=quota)
             elif src["type"] == "rss_hn":
-                items = fetch_rss_hn(src)
+                items = fetch_rss_hn(src, limit=quota)
             elif src["type"] == "json_api":
-                items = fetch_json_api(src)
+                items = fetch_json_api(src)[:quota]
             elif src["type"] == "playwright_list_with_detail":
-                items = fetch_playwright_list(src)
+                items = fetch_playwright_list(src)[:quota]
             else:
                 items = []
             print(f"✅ {len(items)} 条")
