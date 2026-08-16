@@ -188,3 +188,29 @@
 HN RSS description 只含 "Comments" 链接（无法从 RSS 拿概要）。新增 `enrich_og_description()`：
 - 抓完全部 RSS 后，对 `subtitle` 为空的条目用 Playwright 抓详情页 `og:description`
 - 找不到 OG 的（404 / 老链接）就留空，不影响卡片
+
+## DEC-017 · 翻译服务选 C（Google Translate 免费）· 实际用 MyMemory（2026-08-16 16:44）
+
+**背景**：恒哥要求英文资讯翻译成中文。先选了 DeepL（需 API key），恒哥改选 **C. 接 Google Translate 免费接口**。
+
+**实际执行**：
+1. Google Translate 隐藏 API（`translate.googleapis.com/translate_a/single`）—— **已被官方封死**，返回 `{"src":""}` 空响应
+2. 降级到 **MyMemory translated.net**（`api.mymemory.translated.net/get`）—— ✅ 工作正常
+   - 免费 5000 字符/天/IP（足够 OPC12 用：~2000 字符/天）
+   - 无需 API key
+   - 稳定可商用
+
+**翻译效果**（2026-08-16 7 段全成功）：
+- Anthropic's bio-weapons filter → Anthropic的生物武器过滤器关闭了近一年，暴露了1.33亿个请求 ✅
+- Optima tackles AI benchmarking → Optima通过让用户根据自己的数据测试模型来解决人工智能基准测试的最大缺陷 ✅
+- LLM → 法学硕士 ⚠️ （字面翻译"法学硕士"，实际应为"大语言模型"，P2 待优化）
+- Asus Bike Booster → 华硕自行车助推器 ✅
+
+**实施**：
+- `scripts/03_translate.py` 改用 MyMemory
+- `.github/workflows/daily.yml` 去掉 DEEPL_API_KEY 依赖（MyMemory 不用 key）
+- fetch 流程：00_fetch.py → 03_translate.py → commit data → render 触发
+
+**P2 待优化**：
+- LLM 术语本地化词典（避免 MyMemory 字面翻译）
+- 翻译质量监控（标题长度异常 / 中英混杂检测）

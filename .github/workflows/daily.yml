@@ -52,9 +52,13 @@ jobs:
           for s in d['sources']:
             print(f'  {s[\"label\"]}: {s[\"count\"]} 条')
           if d['total'] < 10:
-            print(f'⚠️ 未达标 ({d[\"total\"]}/10)')
+            print(f'⚠️ 未达标 ({d['\''total'\'']}/10)')
             sys.exit(1)
           "
+
+      - name: Translate English items to Chinese (Google Translate free)
+        run: |
+          python scripts/03_translate.py || echo "⚠️ 翻译失败，原条目保留英文"
 
       - name: Commit and push data
         run: |
