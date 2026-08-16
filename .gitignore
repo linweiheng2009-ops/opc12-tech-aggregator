@@ -1,0 +1,26 @@
+# macOS
+.DS_Store
+._*
+
+# Editors
+.vscode/
+.idea/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Render 中间产物（每日重生成）
+data/_render.html
+
+# 临时探查脚本
+/tmp/
+
+# Environment
+.env
+.env.local
+
+# Logs
+*.log

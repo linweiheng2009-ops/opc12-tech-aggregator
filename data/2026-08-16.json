@@ -1,0 +1,114 @@
+{
+  "date": "2026-08-16",
+  "generated_at": "2026-08-16T11:37:05",
+  "total": 10,
+  "sources": [
+    {
+      "source": "guokr",
+      "label": "果壳",
+      "count": 2
+    },
+    {
+      "source": "ifanr",
+      "label": "爱范儿",
+      "count": 2
+    },
+    {
+      "source": "solidot",
+      "label": "Solidot",
+      "count": 2
+    },
+    {
+      "source": "sspai",
+      "label": "少数派",
+      "count": 2
+    },
+    {
+      "source": "ithome",
+      "label": "IT之家",
+      "count": 2
+    }
+  ],
+  "items": [
+    {
+      "source": "guokr",
+      "label": "果壳",
+      "color": "#83C176",
+      "title": "别再去西餐厅当冤大头！居家实现高端肉食自由，所有人都可以把西餐厅顶配餐食搬回家",
+      "url": "https://www.guokr.com/article/469931",
+      "subtitle": ""
+    },
+    {
+      "source": "guokr",
+      "label": "果壳",
+      "color": "#83C176",
+      "title": "AI 满篇的“不是……而是……”，我开始不敢写了",
+      "url": "https://www.guokr.com/article/469930",
+      "subtitle": ""
+    },
+    {
+      "source": "ifanr",
+      "label": "爱范儿",
+      "color": "#F25C54",
+      "title": "早报｜曝苹果与阿里合作训练AI模型/微信:永不推出朋友圈二次编辑/售价20万,追觅首台手机交付",
+      "url": "https://www.ifanr.com/1675280?utm_source=rss&utm_medium=rss&utm_campaign=",
+      "subtitle": "· Google DeepMind 或裁员三分之一以上，资源转向 Flash · WorkBuddy 接入 GLM-5.3 · 曝 DeepSeek 正研发情感 AI 模型#欢迎关注爱范儿官方微信公众号：爱范儿（微信号：ifanr），更多精彩内容第一时间为您奉上。"
+    },
+    {
+      "source": "ifanr",
+      "label": "爱范儿",
+      "color": "#F25C54",
+      "title": "23.98 万元起，大五座魏牌 V8X 上市，并非 V9X 的减法",
+      "url": "https://www.ifanr.com/1675246?utm_source=rss&utm_medium=rss&utm_campaign=",
+      "subtitle": "其实是少了一个座位的 V9X。#欢迎关注爱范儿官方微信公众号：爱范儿（微信号：ifanr），更多精彩内容第一时间为您奉上。"
+    },
+    {
+      "source": "solidot",
+      "label": "Solidot",
+      "color": "#1F6FEB",
+      "title": "俄罗斯导弹使用了英伟达的 Jetson Orin",
+      "url": "https://www.solidot.org/story?sid=85104",
+      "subtitle": "俄罗斯新型 S-71“Monochrome”巡航航空被发现使用了英伟达的 Jetson Orin 计算模块。俄罗斯使用的是 2023 年推出的 Jetson Orin NX 16GB 模块，而英伟达则在 2022 年初就退出了俄罗斯市场，这意味俄罗斯是通过其它渠道获得英伟达芯片的。英伟达表示，Jetson 是消费级产品"
+    },
+    {
+      "source": "solidot",
+      "label": "Solidot",
+      "color": "#1F6FEB",
+      "title": "年轻美国人日益不信任 AI 及 AI 公司高管",
+      "url": "https://www.solidot.org/story?sid=85103",
+      "subtitle": "对 1088 名年龄在 18-34 岁美国人的调查发现，绝大多数受访者表示不信任投资 AI 的大公司高管，包括 Elon Musk、Sam Altman 和 Mark Zuckerberg。45% 的受访者认为 AI 会对其职业生涯产生负面影响，只有 10% 的人认为 AI 会对他们有帮助。年轻人对 AI 公司高层也日"
+    },
+    {
+      "source": "sspai",
+      "label": "少数派",
+      "color": "#D9472A",
+      "title": "一个Emoji让你的文档阅读量提升300%！",
+      "url": "https://sspai.com/post/113494",
+      "subtitle": "本周为大家带来知识管理美学周刊的第009期今日分享主题：如何在飞书文档等一众文档工具中，用好Emoji图标，更快速地提升视觉吸引力与主题辨识度？（1）为什么需要Emoji？你是否曾打开一个文档，密密麻 ..."
+    },
+    {
+      "source": "sspai",
+      "label": "少数派",
+      "color": "#D9472A",
+      "title": "Reloop 听力还缺什么？",
+      "url": "https://sspai.com/post/113476",
+      "subtitle": "最开始做Reloop，我想得很简单：做一款干净的听力软件。当时我在学英语，偶尔也会读一些英文文章。我不缺内容，YouTube、播客和网页上到处都是。真正想要的，只是把自己感兴趣的内容导入一个地方，安静 ..."
+    },
+    {
+      "source": "ithome",
+      "label": "IT之家",
+      "color": "#2C7BE5",
+      "title": "美国加州货运抢劫案频发，AI 数据中心硬件成目标",
+      "url": "https://www.ithome.com/0/990/259.htm",
+      "subtitle": "IT之家 8 月 16 日消息，据《连线》杂志调查，近几个月美国加州公路接连发生两起货运抢劫案：窃贼先逼停负责押运的私人安保车辆，使其失去行动能力，随后卷走车上价值数百万美元的 AI 数据中心硬件。两批货物均从硅谷运往南加州，涉事卡车至今下落不明。这两起案件发生的大背景是：2026 年第二季度，美国和加拿大的货运盗窃损"
+    },
+    {
+      "source": "ithome",
+      "label": "IT之家",
+      "color": "#2C7BE5",
+      "title": "联想拯救者 Y700 无极小平板真机曝光：能插卡用 5G、改用 OLED 屏",
+      "url": "https://www.ithome.com/0/990/258.htm",
+      "subtitle": "IT之家 8 月 16 日消息，博主 @闪飞 分享了联想拯救者 Y700 无极小平板真机外观。博主表示，联想拯救者 Y700 无极小平板最大的变化就是能插卡用 5G，同时改用了 OLED 屏，“LCD 党”用户可能要失望了。据IT之家此前报道，联想拯救者 Y700 无极小平板将于 8 月 25 日 19:00 发布。目"
+    }
+  ]
+}
