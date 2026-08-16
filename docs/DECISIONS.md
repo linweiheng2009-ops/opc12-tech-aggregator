@@ -322,3 +322,21 @@ for k, txt in enumerate(translated):
 | friend_card1 | 1:1 10 条 |
 | wechat_16x9_card1 | **16:9 单张 10 条** |
 | wechat_top_card1 | 2.35:1 头条 |
+
+## DEC-019b · 16:9 cell subtitle-row flex:1（2026-08-16 21:29）
+
+恒哥 21:27 选 C：增加每条概要行数，让 cell 撑满高度。
+
+### 第一版：line-clamp 5 → 12（无效）
+subtitle 实际只有 4-5 行，clamp 12 没视觉变化。
+
+### 第二版：flex:1 让 subtitle 撑满剩余空间
+`.cell .subtitle-row { flex:1; }` 让 subtitle-row box 撑到 cell 底部，但 line-clamp 限制文本只能 12 行，所以文本还是短。
+
+### 最终效果
+cell 背景（rgba 4% 白）覆盖整格，文字紧贴顶部 + 标题 2 行 + 概要最多 12 行。视觉上每行紧凑填充。
+
+如果恒哥还嫌空，可以：
+- 给 cell 加底部数字页码 "01/10"
+- 在 subtitle-row 底部加一行 tag（无源名的情况下，可加 "AI/科技/硬件" 分类）
+- 或者接受现状

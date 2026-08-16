@@ -214,8 +214,8 @@ html, body {{ width:{W}px; min-height:{H}px; background:#0a0e1a;
   word-break:break-word; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
   overflow:hidden; }}
 .cell .subtitle-row {{ font-size:{p['row_subtitle_size']}px; color:#9ca3af; line-height:1.35;
-  word-break:break-word; overflow:hidden; display:-webkit-box; -webkit-line-clamp:5;
-  -webkit-box-orient:vertical; }}
+  word-break:break-word; overflow:hidden; display:-webkit-box; -webkit-line-clamp:12;
+  -webkit-box-orient:vertical; flex:1; }}
 .cell .num {{ width:20px; height:20px; flex-shrink:0; display:flex; align-items:center; justify-content:center;
   font-family:"SF Mono","Menlo",monospace; font-size:11px; font-weight:700;
   color:#00d4b8; background:rgba(0,212,184,0.1); border:1px solid rgba(0,212,184,0.3); border-radius:3px; }}
