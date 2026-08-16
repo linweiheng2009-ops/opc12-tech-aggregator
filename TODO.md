@@ -14,8 +14,11 @@
 
 - [x] 更新 OPC 主 README（~/Documents/OPC/README.md）加 12_ 索引
 - [x] 改名 12_科技聚合_Kickstarter_IT之家 → 12_科技聚合_科技资讯5源
-- [ ] 建 GitHub repo + Actions workflow + 本地 launchd render
-- [ ] 验证全链路
+- [x] 建 GitHub repo: linweiheng2009-ops/opc12-tech-aggregator
+- [x] Actions workflow: `.github/workflows/daily.yml`（UTC 00:00 跑 fetch）
+- [x] 本地 launchd render: `~/Library/LaunchAgents/com.opc12.tech.render.plist`（SGT 08:30 跑 render）
+- [x] 验证全链路（11:43 手动跑 + GitHub Actions workflow_dispatch 都成功）
+- [ ] 明天 8:30 后看 launchd 是否自动跑成功（确认 cron 生效）
 
 ---
 

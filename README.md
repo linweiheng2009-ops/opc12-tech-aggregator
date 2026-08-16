@@ -25,11 +25,11 @@
 | 4 | **少数派** sspai.com | 科技生活方式 | JSON API | 🟠 #D9472A | ✅ |
 | 5 | **IT之家** ithome.com | 数码综合 | RSS /rss/ | 🔵 #2C7BE5 | ✅ |
 
-> ⚠️ **DEC-002**：恒哥原本指定"虎嗅"，但虎嗅全站被阿里云 WAF 滑块验证挡死（Playwright + stealth 破不了），替换为 **少数派**（科技生活方式调性最近 + 有 JSON API）。
+> ✅ **DEC-002/003 已接受**（恒哥 2026-08-16 11:41 拍板）：虎嗅→少数派、36氪→Solidot 两个替换定下来。
 >
-> ⚠️ **DEC-003**：恒哥原本指定"36氪"，但 36kr 在新加坡 IP 被 Cloudflare 风控（Playwright 拿到 3.7KB 空页面），替换为 **Solidot**（科技深度新闻 + RSS 100% 稳定）。
+> DEC-002 详细：虎嗅全站被阿里云 WAF 滑块验证挡死（Playwright + stealth 破不了），少数派（科技生活方式）有 JSON API 含 summary。
 >
-> 两个替换都等恒哥 review，可随时改回。
+> DEC-003 详细：36kr 在新加坡 IP 被 Cloudflare 风控（Playwright 拿到 3.7KB 空页面），Solidot（科技深度新闻）RSS 100% 稳定。
 
 ---
 
@@ -115,16 +115,25 @@ python3 scripts/01_render_card.py
 
 ---
 
-## ⏰ 定时任务
+## ⏰ 定时任务（✅ 已配）
 
-**待定**。两个候选方案：
+| 环节 | 调度方 | 时间 | 内容 |
+|---|---|---|---|
+| **fetch** | GitHub Actions cron | 每天 UTC 00:00 / SGT 08:00 | `00_fetch.py` 抓 5 源 × 2 条 → commit `data/YYYY-MM-DD.json` 回 push |
+| **render** | macOS launchd | 每天 SGT 08:30 | `git pull` 拿最新 data → `01_render_card.py` → PNG |
 
-| 方案 | 优点 | 缺点 |
-|---|---|---|
-| **A. GitHub Actions**（仿 OPC 09） | 免费、cron 精确、稳定 | 数据要 commit 推送，数据源访问受 GitHub IP 影响（36kr 风控可能例外） |
-| **B. 本地 launchd / OpenClaw cron** | 跑在恒哥 Mac，数据直存本地 | Mac 不在线就漏跑 |
+**配置位置**：
+- Workflow: `.github/workflows/daily.yml`
+- LaunchAgent: `~/Library/LaunchAgents/com.opc12.tech.render.plist`
+- 启动脚本: `scripts/run_render.sh`
 
-待恒哥拍板（建议 A，跟 OPC 09 同套）。
+**GitHub repo**: https://github.com/linweiheng2009-ops/opc12-tech-aggregator
+
+**首次验证**（2026-08-16 11:43）：
+- ✅ GitHub Actions workflow_dispatch 触发成功（commit `ae7728f` "data: daily snapshot 2026-08-16"）
+- ✅ 5 源全绿（10 条）
+- ✅ launchd plist 语法通过（plutil -lint OK）
+- ✅ 本地手动跑 run_render.sh：git pull → render → PNG 1.2MB
 
 ---
 

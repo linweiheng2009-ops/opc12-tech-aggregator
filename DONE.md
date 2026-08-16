@@ -4,11 +4,24 @@
 
 ---
 
-## 2026-08-16 11:37 · 全链路跑通 ✅
+## 2026-08-16 11:43 · 恒哥拍板 + 自动化全跑通 ✅
 
-- `00_fetch.py` → `data/2026-08-16.json`（10 条）
-- `01_render_card.py` → `~/Documents/code poj/photo/OPC12_科技聚合/20260816_1137_科技聚合.png`（1.2MB，3:4 卡片）
-- 5 源全绿：果壳 ✅ / 爱范儿 ✅ / Solidot ✅ / 少数派 ✅ / IT之家 ✅
+### 恒哥拍板 3 件事
+- DEC-008 cron 架构 → ✅ GitHub Actions
+- DEC-009 目录名 → ✅ 改为 `12_科技聚合_科技资讯5源`
+- DEC-002/003 源替换 → ✅ 接受（虎嗅→少数派 / 36kr→Solidot）
+
+### 自动化全链路
+- ✅ GitHub repo 创建：https://github.com/linweiheng2009-ops/opc12-tech-aggregator
+- ✅ GitHub Actions workflow：`.github/workflows/daily.yml`（UTC 00:00 跑 fetch）
+- ✅ workflow_dispatch 手动触发一次成功：commit `ae7728f` "data: daily snapshot 2026-08-16"
+- ✅ 本地 launchd：`~/Library/LaunchAgents/com.opc12.tech.render.plist`（SGT 08:30 跑 render）
+- ✅ 启动脚本：`scripts/run_render.sh`（git pull + render）
+- ✅ 手动跑脚本成功：生成 `20260816_1143_科技聚合.png`（1.2MB）
+
+### 文档同步
+- ✅ OPC 主 README 索引已同步改名字
+- ✅ README / DECISIONS / PROJECT_PLAN / TODO 5 个文件状态同步
 
 ## 2026-08-16 11:35 · 5 源配置最终版
 

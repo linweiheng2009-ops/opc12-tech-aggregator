@@ -21,14 +21,14 @@
 
 ---
 
-## Phase 2 · 自动化（**P0**，待恒哥拍板）
+## Phase 2 · 自动化（✅ 已完成 2026-08-16）
 
-- [ ] **cron 架构选型**（DEC-008）：
-  - [ ] 选项 A：GitHub Actions（仿 OPC 09，每天 UTC 00:00 / SGT 08:00 跑）
-  - [ ] 选项 B：本地 launchd（Mac 不在线就漏跑）
-- [ ] 配 cron workflow
-- [ ] **目录名改**（DEC-009，候选 `12_科技聚合_科技资讯5源`）
-- [ ] **OPC 主 README 索引加 12_**（已做）
+- [x] **cron 架构**（DEC-008）：✅ GitHub Actions（仿 OPC 09）
+- [x] **Workflow 配置**：`.github/workflows/daily.yml`（每天 UTC 00:00 跑 fetch + commit）
+- [x] **本地 launchd**：每天 SGT 08:30 跑 render（git pull + 渲染 + PNG）
+- [x] **目录名改**（DEC-009）：`12_科技聚合_Kickstarter_IT之家` → `12_科技聚合_科技资讯5源`
+- [x] **GitHub repo**：https://github.com/linweiheng2009-ops/opc12-tech-aggregator
+- [x] **OPC 主 README 索引加 12_**
 
 ---
 
