@@ -22,6 +22,30 @@ PHOTO.mkdir(parents=True, exist_ok=True)
 
 # ── 4 个尺寸 profile ──────────────────────────────────
 
+# 源 AI 浓度优先级（头条图主推用）· DEC-014
+SOURCE_AI_PRIORITY = {
+    "qbitai": 5,      # 中文 AI 第1
+    "thdecoder": 4,   # 英文 AI 第1
+    "solidot": 3,     # 科技深度（常含 AI）
+    "hn": 2,          # 英文科技风向（不定）
+    "guokr": 1,       # 科技杂文
+}
+
+# 源 emoji 图标（P1-C 16:9 cell 用）· DEC-014
+SOURCE_EMOJI = {
+    "guokr": "🌿",
+    "qbitai": "🧠",
+    "solidot": "🛰️",
+    "thdecoder": "🤖",
+    "hn": "🔥",
+}
+
+def pick_top_item(items):
+    """头条图主推挑 AI 浓度最高的 1 条"""
+    if not items:
+        return None
+    return max(items, key=lambda x: SOURCE_AI_PRIORITY.get(x["source"], 0))
+
 FORMATS = {
     "xiaohongshu": {
         "label": "小红书 3:4",
@@ -85,9 +109,10 @@ def html_vertical(p, items):
     for i, it in enumerate(items, 1):
         label = it.get("label", it["source"]).upper()
         color = it.get("color") or "#2C7BE5"
+        emoji = SOURCE_EMOJI.get(it["source"], "📰")
         rows.append(f"""
         <div class="row">
-          <div class="thumb"><div class="placeholder">{i}</div></div>
+          <div class="thumb"><div class="placeholder">{emoji}</div></div>
           <div class="meta">
             <div class="src" style="color:{color};border-color:{color};">{label}</div>
             <div class="title-row">{it['title']}</div>
@@ -114,10 +139,10 @@ def html_horizontal(p, items):
     for i, it in enumerate(items, 1):
         label = it.get("label", it["source"]).upper()
         color = it.get("color") or "#2C7BE5"
-        # 16:9 缩略图放左侧 + 标题在右（不显示 subtitle，省空间）
+        emoji = SOURCE_EMOJI.get(it["source"], "📰")
         rows.append(f"""
         <div class="cell">
-          <div class="src" style="color:{color};border-color:{color};">{label}</div>
+          <div class="src" style="color:{color};border-color:{color};">{emoji} {label}</div>
           <div class="title-row">{it['title']}</div>
         </div>""")
     return f"""
@@ -135,15 +160,17 @@ def html_horizontal(p, items):
 </div>"""
 
 def html_hero(p, items):
-    """头条封面图：1 条主推"""
-    if items:
-        top = items[0]
+    """头条封面图：智能挑 AI 浓度最高的 1 条作主推（P1-B）"""
+    top = pick_top_item(items) if items else None
+    if top:
         label = top.get("label", top["source"]).upper()
         color = top.get("color") or "#2C7BE5"
+        emoji = SOURCE_EMOJI.get(top["source"], "📰")
         main_title = top["title"]
     else:
         label = ""
         color = "#2C7BE5"
+        emoji = "📰"
         main_title = ""
     return f"""
 <div class="gradient"></div>
@@ -152,7 +179,7 @@ def html_hero(p, items):
     <div class="tag" style="border-color:{color};color:{color};">{p['tag_text']}</div>
     <div class="title">{p['title_text']}</div>
     <div class="subtitle">{p['subtitle_text']}</div>
-    <div class="src" style="color:{color};border-color:{color};">{label}</div>
+    <div class="src" style="color:{color};border-color:{color};">{emoji} {label}</div>
     <div class="top-title">{main_title}</div>
   </div>
   <div class="right">

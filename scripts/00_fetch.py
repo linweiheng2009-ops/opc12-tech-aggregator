@@ -123,10 +123,46 @@ def fetch_rss_hn(src):
             "color": src["color"],
             "title": title,
             "url": link,
-            "subtitle": desc,  # HN 没 description，留空
+            "subtitle": desc,  # HN 没 description，留空（后续 enrich_og 补）
         })
         if len(items) >= PER_SOURCE:
             break
+    return items
+
+def enrich_og_description(items):
+    """对 subtitle 为空的条目用 Playwright 抓 OG description（P1-A DEC-015）"""
+    need = [it for it in items if not it.get("subtitle")]
+    if not need:
+        return items
+    print(f"  🪄 OG enrichment: {len(need)} 条待补")
+    from playwright.sync_api import sync_playwright
+    with sync_playwright() as p:
+        browser = p.chromium.launch(
+            headless=True,
+            args=["--disable-blink-features=AutomationControlled"],
+        )
+        ctx = browser.new_context(
+            user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/120.0 Safari/537.36",
+        )
+        page = ctx.new_page()
+        page.set_default_timeout(15000)
+        for it in need:
+            try:
+                page.goto(it["url"], wait_until="domcontentloaded", timeout=15000)
+                page.wait_for_timeout(1500)
+                desc = page.evaluate("""() => {
+                    const m1 = document.querySelector('meta[property="og:description"]');
+                    const m2 = document.querySelector('meta[name="description"]');
+                    return (m1 && m1.content) || (m2 && m2.content) || '';
+                }""")
+                if desc:
+                    it["subtitle"] = re.sub(r"\s+", " ", desc).strip()[:160]
+                    print(f"     ✅ {it['label']} | {it['title'][:40]}")
+                else:
+                    print(f"     ⚠️ {it['label']} | {it['title'][:40]} (no OG)")
+            except Exception as ex:
+                print(f"     ❌ {it['label']} | {str(ex)[:50]}")
+        browser.close()
     return items
 
 def fetch_json_api(src):
@@ -280,6 +316,9 @@ def main():
             print(f"❌ {type(e).__name__}: {str(e)[:80]}")
             traceback.print_exc(limit=2)
             summary.append({"source": src["id"], "label": src["label"], "count": 0, "error": str(e)[:80]})
+    
+    # P1-A: 给 subtitle 为空的条目补 OG description（HN 专用）
+    all_items = enrich_og_description(all_items)
     
     # 输出
     payload = {

@@ -161,3 +161,30 @@
 **技术细节**：
 - 新增 `fetch_rss_hn()`：识别 HN 的 description 仅为 "Comments" 链接，清洗后留空
 - `fetch_rss()` 通用化：去掉原"爱范儿 / IT之家"专属注释，所有 RSS 源通用
+
+## DEC-014 · 多尺寸 + emoji + 头条智能主推（2026-08-16 16:12 P1）
+
+### P1-B · 头条图智能挑（DEC-014）
+头条图原来固定取 `items[0]`（可能是果壳做牛排），现在按 **源 AI 浓度优先级**挑：
+
+```
+量子位(5) > The Decoder(4) > Solidot(3) > HN(2) > 果壳(1)
+```
+
+效果：现在头条图 100% 推 AI 资讯（量子位 / The Decoder 优先）。
+
+### P1-C · 源 emoji 图标
+| 源 | emoji |
+|---|---|
+| 果壳 | 🌿 |
+| 量子位 | 🧠 |
+| Solidot | 🛰️ |
+| The Decoder | 🤖 |
+| Hacker News | 🔥 |
+
+应用：所有尺寸的 `placeholder` / `src label` 都加 emoji，视觉一眼识别源。
+
+### P1-A · HN/英文源 OG description 自动补抓
+HN RSS description 只含 "Comments" 链接（无法从 RSS 拿概要）。新增 `enrich_og_description()`：
+- 抓完全部 RSS 后，对 `subtitle` 为空的条目用 Playwright 抓详情页 `og:description`
+- 找不到 OG 的（404 / 老链接）就留空，不影响卡片

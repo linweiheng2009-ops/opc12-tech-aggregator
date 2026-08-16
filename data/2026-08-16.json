@@ -1,6 +1,6 @@
 {
   "date": "2026-08-16",
-  "generated_at": "2026-08-16T15:12:17",
+  "generated_at": "2026-08-16T16:12:11",
   "total": 10,
   "sources": [
     {
@@ -82,17 +82,25 @@
       "source": "thdecoder",
       "label": "The Decoder",
       "color": "#9D4EDD",
-      "title": "Optima tackles AI benchmarking's biggest flaw by letting users test models against their own data",
-      "url": "https://the-decoder.com/optima-tackles-ai-benchmarkings-biggest-flaw-by-letting-users-test-models-against-their-own-data/",
-      "subtitle": "Artificial Analysis has launched Optima, a platform that lets users build custom AI benchmarks from their own data and workflows. Models can be compared not jus"
+      "title": "Anthropic's bio-weapons filter was down for nearly a year, exposing 133 million requests",
+      "url": "https://the-decoder.com/anthropics-bio-weapons-filter-was-down-for-nearly-a-year-exposing-133-million-requests/",
+      "subtitle": "In a safety report, Anthropic reveals that its internal filtering system for biological and chemical weapons risks was inactive for nearly a year. During that t"
     },
     {
       "source": "thdecoder",
       "label": "The Decoder",
       "color": "#9D4EDD",
-      "title": "One in five US workers now delegates tasks to AI instead of colleagues, survey finds",
-      "url": "https://the-decoder.com/one-in-five-us-workers-now-delegates-tasks-to-ai-instead-of-colleagues-survey-finds/",
-      "subtitle": "A representative survey by Epoch AI found that 20 percent of employed Americans hand off at least one task to AI that a human used to do. Generally, they accept"
+      "title": "Optima tackles AI benchmarking's biggest flaw by letting users test models against their own data",
+      "url": "https://the-decoder.com/optima-tackles-ai-benchmarkings-biggest-flaw-by-letting-users-test-models-against-their-own-data/",
+      "subtitle": "Artificial Analysis has launched Optima, a platform that lets users build custom AI benchmarks from their own data and workflows. Models can be compared not jus"
+    },
+    {
+      "source": "hn",
+      "label": "Hacker News",
+      "color": "#FF6600",
+      "title": "What happens when an LLM never sees material beyond fifth grade?",
+      "url": "https://littlelearner-ll.github.io/",
+      "subtitle": ""
     },
     {
       "source": "hn",
@@ -100,15 +108,7 @@
       "color": "#FF6600",
       "title": "Asus Bike Booster",
       "url": "https://www.asus.com/accessories/bike-booster/asus-oxiis/oxiis-intelligent-bike-booster/",
-      "subtitle": ""
-    },
-    {
-      "source": "hn",
-      "label": "Hacker News",
-      "color": "#FF6600",
-      "title": "Asynchronous I/O in DuckDB: Work, Thread, Work",
-      "url": "https://duckdb.org/2026/07/31/asynchronous-io",
-      "subtitle": ""
+      "subtitle": "ASUS Oxiis E250G1 transforms any bike with 500W peak boost, 50 km eco range, app control, fast USB-C charging, and easy install now for riders"
     }
   ]
 }
