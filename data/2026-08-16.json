@@ -69,41 +69,41 @@
       "source": "thdecoder",
       "label": "The Decoder",
       "color": "#9D4EDD",
-      "title": "OpenAI dissolved the team built to catch catastrophic AI risks, reassigning its work to other groups",
+      "title": "OpenAI解散了为发现灾难性人工智能风险而建立的团队，将其工作重新分配给其他团队",
       "url": "https://the-decoder.com/openai-dissolved-the-team-built-to-catch-catastrophic-ai-risks-reassigning-its-work-to-other-groups/",
-      "subtitle": "OpenAI shut down its \"Preparedness\" team, which evaluated whether the company's own AI models could pose catastrophic risks. The work has been parceled out to e"
+      "subtitle": "OpenAI关闭了其“备灾”团队，该团队评估了公司自己的人工智能模型是否会带来灾难性风险。该作品已被分配给"
     },
     {
       "source": "thdecoder",
       "label": "The Decoder",
       "color": "#9D4EDD",
-      "title": "Anthropic's bio-weapons filter was down for nearly a year, exposing 133 million requests",
+      "title": "Anthropic的生物武器过滤器关闭了近一年，暴露了1.33亿个请求",
       "url": "https://the-decoder.com/anthropics-bio-weapons-filter-was-down-for-nearly-a-year-exposing-133-million-requests/",
-      "subtitle": "In a safety report, Anthropic reveals that its internal filtering system for biological and chemical weapons risks was inactive for nearly a year. During that t"
+      "subtitle": "在一份安全报告中， Anthropic透露，其生物和化学武器风险的内部过滤系统已停用近一年。在此期间，"
     },
     {
       "source": "thdecoder",
       "label": "The Decoder",
       "color": "#9D4EDD",
-      "title": "Optima tackles AI benchmarking's biggest flaw by letting users test models against their own data",
+      "title": "Optima通过让用户根据自己的数据测试模型来解决人工智能基准测试的最大缺陷",
       "url": "https://the-decoder.com/optima-tackles-ai-benchmarkings-biggest-flaw-by-letting-users-test-models-against-their-own-data/",
-      "subtitle": "Artificial Analysis has launched Optima, a platform that lets users build custom AI benchmarks from their own data and workflows. Models can be compared not jus"
+      "subtitle": "Artificial Analysis 推出了Optima ，这是一个允许用户根据自己的数据和工作流构建自定义AI基准的平台。模型可以进行比较，而不是jus"
     },
     {
       "source": "hn",
       "label": "Hacker News",
       "color": "#FF6600",
-      "title": "Asus Bike Booster",
+      "title": "华硕自行车助推器",
       "url": "https://www.asus.com/accessories/bike-booster/asus-oxiis/oxiis-intelligent-bike-booster/",
-      "subtitle": "ASUS Oxiis E250G1 transforms any bike with 500W peak boost, 50 km eco range, app control, fast USB-C charging, and easy install now for riders"
+      "subtitle": "华硕Oxiis E250G1通过500W峰值增压、50公里环保续航里程、应用程序控制、快速USB-C充电和现在轻松安装为骑手改造任何自行车"
     },
     {
       "source": "hn",
       "label": "Hacker News",
       "color": "#FF6600",
-      "title": "Asynchronous I/O in DuckDB: Work, Thread, Work",
+      "title": "DuckDB中的异步I/O ：工作、线程、工作",
       "url": "https://duckdb.org/2026/07/31/asynchronous-io",
-      "subtitle": "Starting with v2.0, scheduled for fall 2026, DuckDB will support asynchronous reads of Parquet and CSV files. This can significantly speed up queries when synch"
+      "subtitle": "从v2.0 （计划于2026年秋季推出）开始， DuckDB将支持Parquet和CSV文件的异步读取。这可以大大加快同步时的查询速度"
     }
   ]
 }

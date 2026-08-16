@@ -282,9 +282,15 @@ def main():
     print(f"🌐 MyMemory 英→中：{len(en_items)} 条英文条目 ({len(texts)} 段)...")
     translated = translate_batch(texts)
     
-    # 写回：对所有英文条目跑一次 POST_REPLACE（不论翻译是否成功）
-    # 这样可以修正已是中文的 JSON 里残留的错误译法（如“法学硕士”）
+    # 写回：用 translated 结果，再用 apply_term_dict 修正
     success = 0
+    for k, txt in enumerate(translated):
+        idx, field = meta[k]
+        if txt and txt != texts[k]:
+            items[idx][field] = txt
+            success += 1
+    
+    # 额外：对所有英文条目再跑一次 POST_REPLACE（防错误译法如“法学硕士”）
     for i, it in enumerate(items):
         if it["source"] in EN_SOURCES:
             for field in ("title", "subtitle"):

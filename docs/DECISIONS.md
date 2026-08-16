@@ -274,3 +274,51 @@ Hacker News  2 条/天
 | `20260816_2118_wechat_16x9_card1.png` | 16:9 (1280×720) | 640 KB |
 | `20260816_2118_wechat_16x9_card2.png` | 16:9 (1280×720) | 629 KB |
 | `20260816_2118_wechat_top_card1.png` | 2.35:1 (900×383) | 330 KB |
+
+## DEC-019 · 16:9 单张 10 条 + 补翻译 bug 修复（2026-08-16 21:22）
+
+恒哥 21:21 两个反馈：
+1. 16:9 一张就够了（不要上下篇）
+2. 有些信息没翻译（The Decoder 3 条 + HN 2 条 subtitle 全是英文）
+
+### Bug 根因
+`scripts/03_translate.py` main 函数：上一轮加 POST_REPLACE 后，逻辑写错了——
+```python
+for i, it in enumerate(items):
+    if it["source"] in EN_SOURCES:
+        for field in ("title", "subtitle"):
+            new = apply_term_dict(txt)   # ❌ 只跑了 POST_REPLACE
+            # ❌ translate_batch() 的返回值完全被丢弃
+```
+导致 subtitle / title 永远用 `apply_term_dict()` 处理原文（不调用 MyMemory API），英文条目永远是英文。
+
+### 修复
+```python
+translated = translate_batch(texts)
+# 用 translated 结果写回
+for k, txt in enumerate(translated):
+    idx, field = meta[k]
+    if txt and txt != texts[k]:
+        items[idx][field] = txt
+        success += 1
+# 然后再跑一次 POST_REPLACE（防止 MyMemory 错误译法）
+```
+
+### 16:9 单张改造
+- profile.items_per_card: 5 → 10
+- grid-template-rows: 1fr → repeat(2, 1fr)
+- cell 字号小化：title_size 32→28, subtitle 16→13
+- 标签：「5/10 · 上下篇看完」→「一张看完 · 10 条精选」
+
+### 翻译结果（10 段全成功）
+- thdecoder 3 条：OpenAI/Anthropic/Optima 全译成中文 ✅
+- hn 2 条：华硕自行车助推器 + DuckDB 异步 I/O ✅
+- subtitle 也全翻译了 ✅
+
+### 最终 4 张卡片（20260816_2122_*）
+| 文件 | 尺寸 |
+|---|---|
+| xiaohongshu_card1 | 3:4 10 条 |
+| friend_card1 | 1:1 10 条 |
+| wechat_16x9_card1 | **16:9 单张 10 条** |
+| wechat_top_card1 | 2.35:1 头条 |

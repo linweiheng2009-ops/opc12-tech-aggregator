@@ -65,14 +65,14 @@ FORMATS = {
     "wechat_16x9": {
         "label": "公众号 16:9",
         "w": 1280, "h": 720,
-        "title_size": 32, "subtitle_size": 14, "tag_size": 16,
-        "row_title_size": 14, "row_subtitle_size": 11, "num_size": 22,
-        "thumb": 0, "row_gap": 5,
-        "items_per_card": 5,
+        "title_size": 28, "subtitle_size": 13, "tag_size": 16,
+        "row_title_size": 12, "row_subtitle_size": 10, "num_size": 20,
+        "thumb": 0, "row_gap": 4,
+        "items_per_card": 10,
         "layout": "horizontal",
         "tag_text": "DAILY · TECH 10",
         "title_text": "今日科技 10 件新鲜事",
-        "subtitle_text": "5/10 · 上下篇看完",
+        "subtitle_text": "一张看完 · 10 条精选",
         "hashtags": "#科技日报 #OPC12",
     },
     "wechat_top": {
@@ -204,22 +204,21 @@ html, body {{ width:{W}px; min-height:{H}px; background:#0a0e1a;
   align-items:center; font-family:"SF Mono",monospace; font-size:{int(p['row_subtitle_size']*0.9)}px; color:#6b7280; }}
 .hashtags {{ color:#00d4b8; }}
 
-/* 16:9 横向布局 */
+/* 16:9 横向布局 · 单张 10 条（2 行 × 5 列）*/
 .header {{ display:flex; flex-direction:column; gap:4px; }}
-.grid {{ flex:1; margin-top:8px; display:grid; grid-template-columns:repeat(5,1fr);
-  grid-template-rows:1fr; gap:6px; align-content:start; }}
+.grid {{ flex:1; margin-top:6px; display:grid; grid-template-columns:repeat(5,1fr);
+  grid-template-rows:repeat(2,1fr); gap:4px; }}
 .cell {{ background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);
-  border-radius:6px; padding:8px 8px; display:flex; flex-direction:column; gap:4px; overflow:hidden;
-  justify-content:flex-start; }}
+  border-radius:5px; padding:6px 7px; display:flex; flex-direction:column; gap:3px; overflow:hidden; }}
 .cell .title-row {{ font-size:{p['row_title_size']}px; font-weight:600; color:#fff; line-height:1.3;
-  word-break:break-word; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical;
+  word-break:break-word; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
   overflow:hidden; }}
-.cell .subtitle-row {{ font-size:{p['row_subtitle_size']}px; color:#9ca3af; line-height:1.4;
-  word-break:break-word; overflow:hidden; display:-webkit-box; -webkit-line-clamp:8;
+.cell .subtitle-row {{ font-size:{p['row_subtitle_size']}px; color:#9ca3af; line-height:1.35;
+  word-break:break-word; overflow:hidden; display:-webkit-box; -webkit-line-clamp:5;
   -webkit-box-orient:vertical; }}
-.cell .num {{ width:24px; height:24px; flex-shrink:0; display:flex; align-items:center; justify-content:center;
-  font-family:"SF Mono","Menlo",monospace; font-size:13px; font-weight:700;
-  color:#00d4b8; background:rgba(0,212,184,0.1); border:1px solid rgba(0,212,184,0.3); border-radius:4px; }}
+.cell .num {{ width:20px; height:20px; flex-shrink:0; display:flex; align-items:center; justify-content:center;
+  font-family:"SF Mono","Menlo",monospace; font-size:11px; font-weight:700;
+  color:#00d4b8; background:rgba(0,212,184,0.1); border:1px solid rgba(0,212,184,0.3); border-radius:3px; }}
 
 /* 头条图 hero（DEC-016 重设计） */
 .wrap.hero {{ display:flex; flex-direction:row; padding:24px 32px; gap:24px; align-items:stretch; }}
