@@ -13,7 +13,7 @@ import xml.etree.ElementTree as ET
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
 
-# 5 源配置（DEC-001）
+# 5 源配置（DEC-013 · 2026-08-16 拍板 3 个 AI 源）
 SOURCES = [
     {
         "id": "guokr",
@@ -25,11 +25,12 @@ SOURCES = [
         "detail_desc_sel": 'meta[name="description"]',
     },
     {
-        "id": "ifanr",
-        "label": "爱范儿",
-        "color": "#F25C54",
+        "id": "qbitai",
+        "label": "量子位",
+        "color": "#FF6B35",
         "type": "rss",
-        "url": "https://www.ifanr.com/feed",
+        "url": "https://www.qbitai.com/feed",
+        "ai": True,
     },
     {
         "id": "solidot",
@@ -39,18 +40,19 @@ SOURCES = [
         "url": "https://www.solidot.org/index.rss",
     },
     {
-        "id": "sspai",
-        "label": "少数派",
-        "color": "#D9472A",
-        "type": "json_api",
-        "url": "https://sspai.com/api/v1/articles?offset=0&limit=10",
+        "id": "thdecoder",
+        "label": "The Decoder",
+        "color": "#9D4EDD",
+        "type": "rss",
+        "url": "https://the-decoder.com/feed/",
+        "ai": True,
     },
     {
-        "id": "ithome",
-        "label": "IT之家",
-        "color": "#2C7BE5",
-        "type": "rss",
-        "url": "https://www.ithome.com/rss/",
+        "id": "hn",
+        "label": "Hacker News",
+        "color": "#FF6600",
+        "type": "rss_hn",  # HN 描述需要清洗 HTML
+        "url": "https://news.ycombinator.com/rss",
     },
 ]
 
@@ -65,7 +67,7 @@ def fetch_url(url, timeout=FETCH_TIMEOUT):
         return r.read()
 
 def fetch_rss(src):
-    """RSS 抓取（爱范儿 / IT之家）"""
+    """RSS 抓取（量子位 / Solidot / The Decoder）"""
     xml_text = fetch_url(src["url"])
     root = ET.fromstring(xml_text)
     items = []
@@ -90,6 +92,38 @@ def fetch_rss(src):
             "title": title,
             "url": link,
             "subtitle": desc,
+        })
+        if len(items) >= PER_SOURCE:
+            break
+    return items
+
+def fetch_rss_hn(src):
+    """Hacker News RSS（描述仅 "Comments" 链接，需自行用 OG description 抓取或留空）"""
+    xml_text = fetch_url(src["url"])
+    root = ET.fromstring(xml_text)
+    items = []
+    for item in root.findall(".//item"):
+        title_el = item.find("title")
+        link_el = item.find("link")
+        desc_el = item.find("description")
+        if title_el is None or link_el is None:
+            continue
+        title = (title_el.text or "").strip()
+        link = (link_el.text or "").strip()
+        # HN 的 description 只有 "Comments" 链接，清洗后是空文本
+        desc = ""
+        if desc_el is not None and desc_el.text:
+            cleaned = re.sub(r"<[^>]+>", " ", desc_el.text).strip()
+            cleaned = re.sub(r"\s+", " ", cleaned)
+            if cleaned and cleaned.lower() != "comments":
+                desc = cleaned[:160]
+        items.append({
+            "source": src["id"],
+            "label": src["label"],
+            "color": src["color"],
+            "title": title,
+            "url": link,
+            "subtitle": desc,  # HN 没 description，留空
         })
         if len(items) >= PER_SOURCE:
             break
@@ -231,6 +265,8 @@ def main():
         try:
             if src["type"] == "rss":
                 items = fetch_rss(src)
+            elif src["type"] == "rss_hn":
+                items = fetch_rss_hn(src)
             elif src["type"] == "json_api":
                 items = fetch_json_api(src)
             elif src["type"] == "playwright_list_with_detail":

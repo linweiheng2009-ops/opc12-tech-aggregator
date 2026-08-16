@@ -135,3 +135,29 @@
 - **DEC-002/003（✅ 已接受，11:41）** · 虎嗅→少数派 / 36kr→Solidot 两个替换
 - **DEC-010（待）** · 缩略图是否要（fetch 抓 banner → 本地，render 优先用 image_path）
 - **DEC-011（待）** · 卡片是否要导公众号 / 老蔚社圈
+## DEC-013 · 3 源替换为 AI 资讯（2026-08-16 15:12 拍板）
+
+**背景**：原 5 源中只有 Solidot 偶尔有 AI 资讯，AI 浓度太低。恒哥要求换源提 AI 浓度到 60%。
+
+**决策**：
+
+| 原源 | 新源 | 类型 | 抓取方式 |
+|------|------|------|----------|
+| 爱范儿 ifanr | **量子位 qbitai.com** | 中文 AI 第1 | RSS `https://www.qbitai.com/feed` |
+| 少数派 sspai | **The Decoder the-decoder.com** | 英文 AI 第1 | RSS `https://the-decoder.com/feed/` |
+| IT之家 ithome | **Hacker News** | 英文科技风向 | RSS `https://news.ycombinator.com/rss` |
+
+**保留**：果壳（科技杂）+ Solidot（科技深度）
+
+**新 5 源配置**：
+- 果壳（Playwright） — 保留
+- 量子位（RSS） 🆕
+- Solidot（RSS） — 保留
+- The Decoder（RSS） 🆕
+- Hacker News（RSS） 🆕 — 描述清洗（HN 描述只有 "Comments" 链接）
+
+**AI 浓度**：从 0~20% → 60%（3/5 源 100% AI）
+
+**技术细节**：
+- 新增 `fetch_rss_hn()`：识别 HN 的 description 仅为 "Comments" 链接，清洗后留空
+- `fetch_rss()` 通用化：去掉原"爱范儿 / IT之家"专属注释，所有 RSS 源通用

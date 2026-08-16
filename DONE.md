@@ -60,3 +60,20 @@
 - `data/today.json`（5 条手填样本：Kickstarter × 2 + IT之家 × 3）
 - `scripts/01_render_card.py`（5 条版渲染）
 - 渲染过一张卡片（已丢失，旧版格式）
+## 2026-08-16 15:13 · 换 3 个 AI 源 + 16:9 修复
+
+### 恒哥拍板 B 方案（多换 1 个 Hacker News）
+- DEC-013 · 3 源替换：爱范儿→量子位、少数派→The Decoder、IT之家→HN
+- AI 浓度从 0~20% → **60%**（3/5 源 100% AI）
+
+### 验证
+- ✅ `00_fetch.py` 10 条全抓到（果壳2 + 量子位2 + Solidot2 + The Decoder2 + HN2）
+- ✅ `02_render_multi.py` 7 张卡片生成
+- ✅ 16:9 cell 高度修复（`grid-template-rows:1fr` + `.cell::after` 撑满）
+
+### 新 5 源 sample（2026-08-16 15:12）
+- 果壳：别再去西餐厅当冤大头 / AI 满篇的"不是……而是……"
+- 量子位：WorkSwarm / 牛来！A社营收暴涨1400%
+- Solidot：俄罗斯导弹使用 Jetson Orin / 年轻人不信任 AI 公司高管
+- The Decoder：Optima AI benchmarking / 1/5 美国人委托 AI 做事
+- Hacker News：Asus Bike Booster / Asynchronous I/O in DuckDB
