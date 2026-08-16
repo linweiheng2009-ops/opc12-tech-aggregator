@@ -24,3 +24,4 @@ data/_render.html
 
 # Logs
 *.log
+data/_render_*.html
