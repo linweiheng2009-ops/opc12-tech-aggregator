@@ -24,6 +24,147 @@ MM_URL = "https://api.mymemory.translated.net/get"
 # 需要翻译的英文源
 EN_SOURCES = {"thdecoder", "hn"}
 
+# AI/科技 术语词典
+# DEC-017 P2：避免 LLM→法学硕士 这种字面错误
+# 策略：
+#   PRE_REPLACE 在翻译前把英文缩写展开（如 LLM → Large Language Model），
+#   让 MyMemory 能识别 AI 语境
+#   POST_REPLACE 在翻译后修正中文译法（如 "大语言模型" 标准化）
+import re as _re
+
+# 翻译前预处理：英文缩写 → 占位符（MyMemory 不会动占位符）
+# 翻译后占位符还原成中文术语
+PRE_REPLACE = [
+    (r"\bLLMs?\b", "__LLM__"),       # 翻译后 → 大语言模型
+    (r"\bGenAI\b", "__GenAI__"),     # 翻译后 → 生成式AI
+    (r"\bAGI\b", "__AGI__"),         # 翻译后 → 通用人工智能
+    (r"\bGPU(s)?\b", "__GPU__"),     # 翻译后 → GPU
+    (r"\bAPIs?\b", "__API__"),       # 翻译后 → API
+    (r"\bRLHF\b", "__RLHF__"),       # 翻译后 → 人类反馈强化学习
+    (r"\bRAG\b", "__RAG__"),         # 翻译后 → 检索增强生成
+    (r"\bVR\b", "__VR__"),
+    (r"\bAR\b", "__AR__"),
+    (r"\bIoT\b", "__IoT__"),
+    (r"\bSaaS\b", "__SaaS__"),
+    (r"\bNLP\b", "__NLP__"),
+    (r"\bCV\b", "__CV__"),
+    (r"\bML\b", "__ML__"),
+    (r"\bDL\b", "__DL__"),
+]
+
+# 翻译后后处理：占位符还原 + 错误修正
+# 容忍 MyMemory 可能在 __LLM__ 周围加空格（变成 "__ LLM __"）
+# 不使用 \b（中文无单词边界）
+POST_REPLACE = [
+    # 占位符 → 中文术语（容忍空格）
+    ("__LLM__", "大语言模型"),
+    ("__ LLM __", "大语言模型"),
+    ("__GenAI__", "生成式AI"),
+    ("__AGI__", "通用人工智能"),
+    ("__GPU__", "GPU"),
+    ("__API__", "API"),
+    ("__RLHF__", "RLHF"),
+    ("__RAG__", "RAG"),
+    ("__VR__", "VR"),
+    ("__AR__", "AR"),
+    ("__IoT__", "物联网"),
+    ("__SaaS__", "SaaS"),
+    ("__NLP__", "自然语言处理"),
+    ("__CV__", "计算机视觉"),
+    ("__ML__", "机器学习"),
+    ("__DL__", "深度学习"),
+    # 错误修正（纯字符串替换，不用正则 \b）
+    ("法学硕士", "大语言模型"),
+    ("理学硕士", "大语言模型"),
+    ("人性人", "Anthropic"),
+    ("Optima平台平台", "Optima"),
+    ("Optima平台", "Optima"),
+    ("人工分析推出了Optima", "Artificial Analysis 推出了Optima"),
+]
+
+# 翻译后后处理：中文译法标准化 + 品牌名本地化
+TERM_DICT = [
+    # 缩写 → 中文（先大写匹配，再小写匹配）
+    (r"\bLLMs?\b", "大语言模型"),
+    (r"\bLLM\b", "大语言模型"),
+    (r"\bGenAI\b", "生成式AI"),
+    (r"\bAGI\b", "通用人工智能"),
+    (r"\bGPU(s)?\b", "显卡"),
+    (r"\bAPI(s)?\b", "API"),
+    (r"\bOpenAI\b", "OpenAI"),
+    (r"\bAnthropic\b", "Anthropic"),
+    (r"\bChatGPT\b", "ChatGPT"),
+    (r"\bClaude\b", "Claude"),
+    (r"\bGemini\b", "Gemini"),
+    (r"\bMicrosoft\b", "微软"),
+    (r"\bGoogle\b", "谷歌"),
+    (r"\bMeta\b", "Meta"),
+    (r"\bNvidia\b", "英伟达"),
+    (r"\bAmazon\b", "亚马逊"),
+    (r"\bApple\b", "苹果"),
+    (r"\bTesla\b", "特斯拉"),
+    (r"\bSpaceX\b", "SpaceX"),
+    (r"\bAsus\b", "华硕"),
+    (r"\bGitHub\b", "GitHub"),
+    (r"\bLinux\b", "Linux"),
+    (r"\bAndroid\b", "Android"),
+    (r"\bAWS\b", "AWS"),
+    (r"\bAzure\b", "Azure"),
+    (r"\bDocker\b", "Docker"),
+    (r"\bKubernetes\b", "Kubernetes"),
+    (r"\bVR\b", "VR"),
+    (r"\bAR\b", "AR"),
+    (r"\bXR\b", "XR"),
+    (r"\b5G\b", "5G"),
+    (r"\bIoT\b", "物联网"),
+    (r"\bSaaS\b", "SaaS"),
+    (r"\bML\b", "机器学习"),
+    (r"\bDL\b", "深度学习"),
+    (r"\bNLP\b", "自然语言处理"),
+    (r"\bCV\b", "计算机视觉"),
+    (r"\bRLHF\b", "人类反馈强化学习"),
+    (r"\bRAG\b", "检索增强生成"),
+    (r"\btransformer\b", "Transformer架构"),
+    (r"\bbenchmark(s|ing)?\b", "基准测试"),
+    (r"\bstartup(s)?\b", "初创公司"),
+    (r"\bfunding\b", "融资"),
+    (r"\bacquisition\b", "收购"),
+    (r"\bvaluation\b", "估值"),
+    (r"\brelease(d|s)?\b", "发布"),
+    (r"\blaunch(es|ed)?\b", "发布"),
+    (r"\bopen[- ]source\b", "开源"),
+    (r"\bcode\s*generation\b", "代码生成"),
+    (r"\bbio[- ]weapons?\b", "生物武器"),
+    (r"\bfilter(ing)?\b", "过滤"),
+    (r"\binternal\b", "内部"),
+    (r"\breport(s|ed)?\b", "报告"),
+    (r"\bfiltering system\b", "过滤系统"),
+    (r"\bsafety\b", "安全"),
+    (r"\brisk(s)?\b", "风险"),
+    (r"\bexposed?\b", "暴露"),
+    (r"\bnearly a year\b", "近一年"),
+    (r"\binactive\b", "停用"),
+    (r"\bduring that time\b", "在此期间"),
+    (r"\bphysics\b", "物理学"),
+    (r"\bAsus\b", "华硕"),
+    (r"\bpeak boost\b", "峰值增压"),
+    (r"\beco range\b", "节能续航"),
+    (r"\bapp control\b", "应用程序控制"),
+    (r"\bfast charging\b", "快速充电"),
+    (r"\briders?\b", "骑手"),
+    (r"\bbike(s)?\b", "自行车"),
+    (r"\bgrade\b", "年级"),
+    (r"\bbeyond fifth grade\b", "超过五年级"),
+    (r"\bnever sees\b", "从未见过"),
+    (r"\bmaterial(s)?\b", "材料"),
+    (r"\btransforms\b", "改造"),
+    (r"\beasy install\b", "轻松安装"),
+    (r"\bfor riders?\b", "面向骑手"),
+    # 标题常用错误修正
+    (r"人工分析推出了Optima", "Artificial Analysis推出了Optima平台"),  # MyMemory 把 "Artificial Analysis" 当品牌名错译
+    (r"自行车助推器", "自行车动力增强器"),
+]
+
 def translate_one(text, source="en", target="zh-CN", retries=3):
     """MyMemory 单段翻译"""
     if not text or not text.strip():
@@ -79,11 +220,26 @@ def translate_one(text, source="en", target="zh-CN", retries=3):
             return None
     return None
 
+def pre_expand(text):
+    """翻译前：英文缩写 → 占位符（MyMemory 不会动占位符）"""
+    for pattern, repl in PRE_REPLACE:
+        text = _re.sub(pattern, repl, text)
+    return text
+
+def apply_term_dict(text):
+    """翻译后：占位符还原 + 错误修正（纯字符串替换）"""
+    for old, new in POST_REPLACE:
+        text = text.replace(old, new)
+    return text
+
 def translate_batch(texts, source="en", target="zh-CN"):
-    """逐段翻译"""
+    """逐段翻译 + 术语占位符前后处理"""
     results = []
     for t in texts:
-        translated = translate_one(t, source=source, target=target)
+        expanded = pre_expand(t)
+        translated = translate_one(expanded, source=source, target=target)
+        if translated is not None:
+            translated = apply_term_dict(translated)
         results.append(translated if translated is not None else t)
     return results
 
@@ -126,13 +282,18 @@ def main():
     print(f"🌐 MyMemory 英→中：{len(en_items)} 条英文条目 ({len(texts)} 段)...")
     translated = translate_batch(texts)
     
-    # 写回
+    # 写回：对所有英文条目跑一次 POST_REPLACE（不论翻译是否成功）
+    # 这样可以修正已是中文的 JSON 里残留的错误译法（如“法学硕士”）
     success = 0
-    for k, txt in enumerate(translated):
-        idx, field = meta[k]
-        if txt and txt != texts[k]:
-            items[idx][field] = txt
-            success += 1
+    for i, it in enumerate(items):
+        if it["source"] in EN_SOURCES:
+            for field in ("title", "subtitle"):
+                txt = it.get(field, "") or ""
+                if txt:
+                    new = apply_term_dict(txt)
+                    if new != txt:
+                        it[field] = new
+                        success += 1
     
     payload["items"] = items
     today_file.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
