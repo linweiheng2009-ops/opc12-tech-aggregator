@@ -16,8 +16,8 @@ echo "===== $(date '+%Y-%m-%d %H:%M:%S') launchd 触发 render =====" >> "$LOG"
 echo "[1/2] git pull..." >> "$LOG"
 git pull origin main --rebase --autostash >> "$LOG" 2>&1
 
-# 2. 跑 render 生成卡片
-echo "[2/2] render card..." >> "$LOG"
-/usr/bin/python3 scripts/01_render_card.py >> "$LOG" 2>&1
+# 2. 跑 render 生成多尺寸卡片（3:4 / 1:1 / 16:9 / 2.35:1）
+echo "[2/2] render multi-size cards..." >> "$LOG"
+/usr/bin/python3 scripts/02_render_multi.py >> "$LOG" 2>&1
 
 echo "===== 完成 =====" >> "$LOG"

@@ -11,6 +11,7 @@ from pathlib import Path
 from datetime import datetime
 import urllib.request, urllib.error
 import xml.etree.ElementTree as ET
+import time
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
@@ -63,10 +64,23 @@ FETCH_TIMEOUT = 25
 
 # ──── 抓取器 ──────────────────────────────────────────
 
-def fetch_url(url, timeout=FETCH_TIMEOUT):
-    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"})
-    with urllib.request.urlopen(req, timeout=timeout) as r:
-        return r.read()
+def fetch_url(url, timeout=FETCH_TIMEOUT, retries=3):
+    """GET 请求 + 指数退避重试（处理 GitHub Actions 容器偶发 SSL / 超时）"""
+    last_err = None
+    for attempt in range(1, retries + 1):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"})
+            with urllib.request.urlopen(req, timeout=timeout) as r:
+                return r.read()
+        except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, OSError) as e:
+            last_err = e
+            if attempt < retries:
+                wait = 2 ** attempt  # 2 / 4 / 8 秒
+                print(f"     ⚠️ fetch 失败 (attempt {attempt}/{retries}): {type(e).__name__} {str(e)[:50]} · {wait}s 后重试", flush=True)
+                time.sleep(wait)
+            else:
+                print(f"     ❌ fetch 最终失败 ({retries} 次): {type(e).__name__} {str(e)[:80]}", flush=True)
+    raise last_err
 
 def fetch_rss(src, limit=PER_SOURCE):
     """RSS 抓取（量子位 / Solidot / The Decoder）"""
@@ -321,7 +335,12 @@ def main():
             summary.append({"source": src["id"], "label": src["label"], "count": 0, "error": str(e)[:80]})
     
     # P1-A: 给 subtitle 为空的条目补 OG description（HN 专用）
-    all_items = enrich_og_description(all_items)
+    # 容错：OG enrichment 失败不影响主流程（items 已收集完毕，只是 subtitle 留空）
+    try:
+        all_items = enrich_og_description(all_items)
+    except Exception as e:
+        print(f"⚠️  OG enrichment 整体失败（items 已收集，subtitle 留空）: {type(e).__name__}: {str(e)[:80]}")
+        traceback.print_exc(limit=1)
     
     # 输出
     payload = {
