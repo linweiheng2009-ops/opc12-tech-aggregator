@@ -98,7 +98,7 @@ def fetch_rss(src, limit=PER_SOURCE):
         desc = ""
         if desc_el is not None and desc_el.text:
             desc = re.sub(r"<[^>]+>", "", desc_el.text).strip()
-            desc = re.sub(r"\s+", " ", desc)[:160]
+            desc = re.sub(r"\s+", " ", desc)[:400]  # 放宽到 400 字（之前 160 太少）
         if not title or not link:
             continue
         items.append({
@@ -144,6 +144,93 @@ def fetch_rss_hn(src, limit=PER_SOURCE):
         if len(items) >= limit:
             break
     return items
+
+def enrich_summary(items, min_len=100, max_len=400):
+    """对 subtitle 太短（<100 字）的条目抓 article 详情，提炼更长的概要（P1-C 2026-08-17 恒哥要求）
+
+    优先级：OG description → first 3 paragraphs (article/post/main/p fallback)
+    跳过 HN（HN item 页是讨论帖，无正文）
+    防 footer 噪声：跳过"本站"、"ICP"、"版权所有"等明显是 footer 的文本
+    """
+    need = [
+        it for it in items
+        if len(it.get("subtitle") or "") < min_len
+        and it.get("url")
+        and it.get("source") != "hn"  # HN item 页没正文，跳过
+    ]
+    if not need:
+        print(f"  📖 概要补全：跳过（所有条目 ≥ {min_len} 字）")
+        return items
+    print(f"  📖 概要补全：{len(need)} 条待抓详情 (目标 {min_len}~{max_len} 字)")
+
+    summary_js = """() => {
+        const sels = [
+            'article p',
+            '.article-body p',
+            '.post-body p',
+            '.entry-content p',
+            '.content p',
+            'main p',
+            'p'
+        ];
+        for (const sel of sels) {
+            const els = Array.from(document.querySelectorAll(sel));
+            const texts = els.map(p => (p.innerText || '').trim()).filter(t => t.length > 40);
+            if (texts.length >= 1) {
+                return texts.slice(0, 3).join('\\n\\n');
+            }
+        }
+        return '';
+    }"""
+
+    # Footer / 噪声关键词（出现这些词说明是 footer 而非正文，不采用）
+    noise_keywords = ["本站提到的所有注册商标", "ICP证", "ICP备案", "版权所有", "评论属于其发表者所有", "登录 注册"]
+
+    from playwright.sync_api import sync_playwright
+    with sync_playwright() as p:
+        browser = p.chromium.launch(
+            headless=True,
+            args=["--disable-blink-features=AutomationControlled"],
+        )
+        ctx = browser.new_context(
+            user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/120.0 Safari/537.36",
+        )
+        page = ctx.new_page()
+        page.set_default_timeout(15000)
+        for it in need:
+            try:
+                page.goto(it["url"], wait_until="domcontentloaded", timeout=15000)
+                page.wait_for_timeout(1500)
+                # 1. 优先 OG description
+                desc = page.evaluate("""() => {
+                    const m1 = document.querySelector('meta[property="og:description"]');
+                    const m2 = document.querySelector('meta[name="description"]');
+                    return (m1 && m1.content) || (m2 && m2.content) || '';
+                }""")
+                # 2. fallback: first 3 paragraphs
+                if not desc or len(desc) < min_len:
+                    paras = page.evaluate(summary_js)
+                    if paras:
+                        desc = paras
+                if desc:
+                    desc = re.sub(r"\s+", " ", desc).strip()[:max_len]
+                    # 防 footer：含明显噪声关键词就不采用（保留 RSS 原始描述）
+                    is_noise = any(kw in desc for kw in noise_keywords)
+                    old_len = len(it.get("subtitle") or "")
+                    if is_noise:
+                        print(f"     🚫 {it['label']} | {it['title'][:30]} (检测到 footer，保留 RSS 原始)")
+                    elif len(desc) > old_len:
+                        it["subtitle"] = desc
+                        print(f"     ✅ {it['label']} | {it['title'][:30]} → {len(desc)} 字 (↑{len(desc)-old_len})")
+                    else:
+                        print(f"     ⏭ {it['label']} | {it['title'][:30]} (无提升)")
+                else:
+                    print(f"     ⚠️ {it['label']} | {it['title'][:30]} (无内容)")
+            except Exception as ex:
+                print(f"     ❌ {it['label']} | {str(ex)[:50]}")
+        browser.close()
+    return items
+
 
 def enrich_og_description(items):
     """对 subtitle 为空的条目用 Playwright 抓 OG description（P1-A DEC-015）"""
@@ -337,7 +424,20 @@ def main():
     # P1-A: 给 subtitle 为空的条目补 OG description（HN 专用）
     # 容错：OG enrichment 失败不影响主流程（items 已收集完毕，只是 subtitle 留空）
     try:
-        all_items = enrich_og_description(all_items)
+        # P1-C (2026-08-17 恒哥要求概要详细点)：抓 article 详情补概要
+        # 容错：enrich_summary 整体失败不影响主流程（items 已收集，subtitle 保留 RSS 描述）
+        try:
+            all_items = enrich_summary(all_items, min_len=100, max_len=400)
+        except Exception as e:
+            print(f"⚠️  enrich_summary 整体失败（保留 RSS 描述）: {type(e).__name__}: {str(e)[:80]}")
+            traceback.print_exc(limit=1)
+        # P1-A: 给 subtitle 为空的条目补 OG description（HN 专用）
+        # 容错：OG enrichment 失败不影响主流程（items 已收集完毕，只是 subtitle 留空）
+        try:
+            all_items = enrich_og_description(all_items)
+        except Exception as e:
+            print(f"⚠️  OG enrichment 整体失败（items 已收集，subtitle 留空）: {type(e).__name__}: {str(e)[:80]}")
+            traceback.print_exc(limit=1)
     except Exception as e:
         print(f"⚠️  OG enrichment 整体失败（items 已收集，subtitle 留空）: {type(e).__name__}: {str(e)[:80]}")
         traceback.print_exc(limit=1)
