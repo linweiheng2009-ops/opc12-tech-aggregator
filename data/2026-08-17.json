@@ -1,6 +1,6 @@
 {
   "date": "2026-08-17",
-  "generated_at": "2026-08-17T11:05:36",
+  "generated_at": "2026-08-17T11:26:19",
   "total": 10,
   "sources": [
     {
@@ -95,7 +95,7 @@
       "color": "#FF6600",
       "title": "Qwen 3.8 27B很好，但它默认过度思考",
       "url": "https://simonwillison.net/2026/Aug/16/qwen-38-27b/",
-      "subtitle": "周五的大型发布是Qwen 3.8 27B ，这是一款Apache 2许可的27B参数视觉能力大语言模型 ，来自阿里巴巴的Qwen研究实验室。我一直很期待"
+      "subtitle": "周五的大型发布是Qwen 3.8 27B ，这是一款Apache 2许可的27B参数视觉能力大语言模型 ，来自阿里巴巴的Qwen研究实验室。我一直很期待这个： 27B是一个……"
     },
     {
       "source": "hn",
@@ -103,7 +103,7 @@
       "color": "#FF6600",
       "title": "直接文件的生死存亡[pdf]",
       "url": "https://www.ischool.berkeley.edu/sites/default/files/vinton_report_5.pdf",
-      "subtitle": ""
+      "subtitle": "📄 PDF 全文 · 点击查看"
     }
   ]
 }

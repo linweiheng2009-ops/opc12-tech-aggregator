@@ -149,15 +149,24 @@ def enrich_summary(items, min_len=100, max_len=400):
     """对 subtitle 太短（<100 字）的条目抓 article 详情，提炼更长的概要（P1-C 2026-08-17 恒哥要求）
 
     优先级：OG description → first 3 paragraphs (article/post/main/p fallback)
-    跳过 HN（HN item 页是讨论帖，无正文）
+    跳过 PDF（浏览器下载而非渲染，无法抓正文）→ 标记为 "PDF 全文 · 点击查看"
     防 footer 噪声：跳过"本站"、"ICP"、"版权所有"等明显是 footer 的文本
     """
-    need = [
-        it for it in items
-        if len(it.get("subtitle") or "") < min_len
-        and it.get("url")
-        and it.get("source") != "hn"  # HN item 页没正文，跳过
-    ]
+    need = []
+    for it in items:
+        sub_len = len(it.get("subtitle") or "")
+        url = it.get("url") or ""
+        if sub_len >= min_len:
+            continue
+        if not url:
+            continue
+        # PDF 链接：标记但不抓详情（浏览器会下载而非渲染）
+        if url.lower().endswith(".pdf"):
+            if not it.get("subtitle"):
+                it["subtitle"] = "📄 PDF 全文 · 点击查看"
+            print(f"     📄 {it['label']} | {it['title'][:30]} (PDF 跳过详情)")
+            continue
+        need.append(it)
     if not need:
         print(f"  📖 概要补全：跳过（所有条目 ≥ {min_len} 字）")
         return items
