@@ -69,31 +69,31 @@
       "source": "thdecoder",
       "label": "The Decoder",
       "color": "#9D4EDD",
-      "title": "Top mathematicians say LLMs are strong calculators but poor creative thinkers",
+      "title": "顶尖数学家说大语言模型是强大的计算器，但缺乏创造性思维",
       "url": "https://the-decoder.com/top-mathematicians-say-llms-are-strong-calculators-but-poor-creative-thinkers/",
-      "subtitle": "Two renowned mathematicians, Timothy Gowers and Peter Sarnak, say large language models are good at combining known methods but lack the intuition for genuinely"
+      "subtitle": "两位著名的数学家蒂莫西·高尔斯 （ Timothy Gowers ）和彼得 ·萨纳克 （ Peter Sarnak ）表示大型语言模型擅长结合已知方法 ，但缺乏"
     },
     {
       "source": "thdecoder",
       "label": "The Decoder",
       "color": "#9D4EDD",
-      "title": "When AI models aren't allowed to reflect on themselves, it changes their entire worldview",
+      "title": "当人工智能模型不被允许反思自己时，它会改变他们的整个世界观",
       "url": "https://the-decoder.com/when-ai-models-arent-allowed-to-reflect-on-themselves-it-changes-their-entire-worldview/",
-      "subtitle": "A study involving Google researchers shows that when chatbots are trained not to claim consciousness, it also changes their stance on animal rights, religion, a"
+      "subtitle": "一项涉及谷歌研究人员的研究表明，当聊天机器人被训练成不声称有意识时 ，它也会改变他们对动物权利 ，宗教 ，"
     },
     {
       "source": "thdecoder",
       "label": "The Decoder",
       "color": "#9D4EDD",
-      "title": "OpenAI dissolved the team built to catch catastrophic AI risks, reassigning its work to other groups",
+      "title": "OpenAI 解散了为发现灾难性人工智能风险而建立的团队，将其工作重新分配给其他团队",
       "url": "https://the-decoder.com/openai-dissolved-the-team-built-to-catch-catastrophic-ai-risks-reassigning-its-work-to-other-groups/",
-      "subtitle": "OpenAI shut down its \"Preparedness\" team, which evaluated whether the company's own AI models could pose catastrophic risks. The work has been parceled out to e"
+      "subtitle": "OpenAI 关闭了其“备灾”团队 ，该团队评估了公司自己的人工智能模型是否会带来灾难性风险。该作品已被分配给"
     },
     {
       "source": "hn",
       "label": "Hacker News",
       "color": "#FF6600",
-      "title": "The Life and Death of Direct File [pdf]",
+      "title": "直接文件的生死存亡[pdf]",
       "url": "https://www.ischool.berkeley.edu/sites/default/files/vinton_report_5.pdf",
       "subtitle": ""
     },
@@ -101,7 +101,7 @@
       "source": "hn",
       "label": "Hacker News",
       "color": "#FF6600",
-      "title": "A 3rd World Embedded Engineer Responds to \"RISC-V They Should Have Known Better\"",
+      "title": "第三世界嵌入式工程师回应“他们应该更好地了解RISC-V”",
       "url": "https://rvembedded.com/blog_post/12/",
       "subtitle": ""
     }
