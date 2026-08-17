@@ -96,11 +96,13 @@ def html_vertical(p, items):
     """纵向布局：去掉源名，每条 = 序号 + 标题 + 概要"""
     rows = []
     for i, it in enumerate(items, 1):
+        score = it.get('score')
+        heat_html = f'<span class="heat">🔥 {score}</span>' if score else ''
         rows.append(f"""
         <div class="row">
           <div class="num">{i:02d}</div>
           <div class="meta">
-            <div class="title-row">{it['title']}</div>
+            <div class="title-row">{it['title']} {heat_html}</div>
             <div class="subtitle-row">{it.get('subtitle','')}</div>
           </div>
         </div>""")
@@ -123,10 +125,13 @@ def html_horizontal(p, items):
     rows = []
     for i, it in enumerate(items, 1):
         sub = it.get('subtitle', '')
+        score = it.get('score')
+        # 热度标签：有 score 的显示 🔥 分数
+        heat_html = f'<span class="heat">🔥 {score}</span>' if score else ''
         rows.append(f"""
         <div class="cell">
           <div class="num">{i:02d}</div>
-          <div class="title-row">{it['title']}</div>
+          <div class="title-row">{it['title']} {heat_html}</div>
           <div class="subtitle-row">{sub}</div>
         </div>""")
     return f"""

@@ -54,8 +54,9 @@ SOURCES = [
         "id": "hn",
         "label": "Hacker News",
         "color": "#FF6600",
-        "type": "rss_hn",
-        "url": "https://news.ycombinator.com/rss",
+        "type": "hn_api",
+        # Algolia HN Search API：按时间抓 story，过滤过去 48h，按 score 排序后再筛 top
+        "url": "https://hn.algolia.com/api/v1/search_by_date?tags=story&hitsPerPage=100",
     },
 ]
 
@@ -87,6 +88,8 @@ def fetch_rss(src, limit=PER_SOURCE):
     xml_text = fetch_url(src["url"])
     root = ET.fromstring(xml_text)
     items = []
+    # P2 热度：仅取过去 48h（2026-08-17 恒哥要求"收集的数据要有热度"）
+    cutoff_48h = int(time.time()) - 48 * 3600
     for item in root.findall(".//item"):
         title_el = item.find("title")
         link_el = item.find("link")
@@ -101,6 +104,17 @@ def fetch_rss(src, limit=PER_SOURCE):
             desc = re.sub(r"\s+", " ", desc)[:400]  # 放宽到 400 字（之前 160 太少）
         if not title or not link:
             continue
+        # P2 热度过滤：跳过 48h 之前的旧资讯
+        pub_date_el = item.find("pubDate")
+        if pub_date_el is not None and pub_date_el.text:
+            try:
+                from email.utils import parsedate_to_datetime
+                pub_dt = parsedate_to_datetime(pub_date_el.text)
+                pub_ts = int(pub_dt.timestamp())
+                if pub_ts < cutoff_48h:
+                    continue  # 太旧，跳过
+            except Exception:
+                pass  # 解析失败不拦
         items.append({
             "source": src["id"],
             "label": src["label"],
@@ -108,41 +122,56 @@ def fetch_rss(src, limit=PER_SOURCE):
             "title": title,
             "url": link,
             "subtitle": desc,
+            "score": None,  # RSS 无热度信号
+            "comments": None,
         })
         if len(items) >= limit:
             break
     return items
 
 def fetch_rss_hn(src, limit=PER_SOURCE):
-    """Hacker News RSS（描述仅 "Comments" 链接，需自行用 OG description 抓取或留空）"""
-    xml_text = fetch_url(src["url"])
-    root = ET.fromstring(xml_text)
+    """Hacker News: Algolia API（取真实 points/comments，按热度排序）
+
+    源：https://hn.algolia.com/api/v1/search_by_date?tags=story&hitsPerPage=100
+    - 返回过去 48h 所有 stories
+    - 我们按 points 排序、取 top N（带 points >= MIN_POINTS 门槛）
+    - URL 优先用 story_url（真实文章），Ask HN / Show HN fallback 到 HN item 页
+    - P2 热度：2026-08-17 恒哥要求"收集的数据要有热度"
+    """
+    MIN_POINTS = 20  # 门槛：20 points 以上的才是热门
+    raw = fetch_url(src["url"], timeout=20)
+    payload = json.loads(raw)
+    hits = payload.get("hits", [])
+    # 过滤过去 48h
+    cutoff = int(time.time()) - 48 * 3600
+    recent = [h for h in hits if h.get("created_at_i", 0) >= cutoff]
+    # 按 points 排序
+    recent.sort(key=lambda h: (h.get("points", 0), h.get("num_comments", 0)), reverse=True)
+    # 门槛过滤
+    hot = [h for h in recent if h.get("points", 0) >= MIN_POINTS][:limit]
     items = []
-    for item in root.findall(".//item"):
-        title_el = item.find("title")
-        link_el = item.find("link")
-        desc_el = item.find("description")
-        if title_el is None or link_el is None:
+    for h in hot:
+        title = (h.get("title") or "").strip()
+        url = h.get("url") or h.get("story_text") or ""
+        if not url or not title:
             continue
-        title = (title_el.text or "").strip()
-        link = (link_el.text or "").strip()
-        # HN 的 description 只有 "Comments" 链接，清洗后是空文本
-        desc = ""
-        if desc_el is not None and desc_el.text:
-            cleaned = re.sub(r"<[^>]+>", " ", desc_el.text).strip()
-            cleaned = re.sub(r"\s+", " ", cleaned)
-            if cleaned and cleaned.lower() != "comments":
-                desc = cleaned[:160]
+        # Ask HN / Show HN 没外链，用 HN item 页
+        if h.get("_tags") and "ask_hn" in h.get("_tags", []) and not h.get("url"):
+            url = f"https://news.ycombinator.com/item?id={h['objectID']}"
+        elif h.get("_tags") and "show_hn" in h.get("_tags", []) and not h.get("url"):
+            url = f"https://news.ycombinator.com/item?id={h['objectID']}"
         items.append({
             "source": src["id"],
             "label": src["label"],
             "color": src["color"],
             "title": title,
-            "url": link,
-            "subtitle": desc,  # HN 没 description，留空（后续 enrich_og 补）
+            "url": url,
+            "subtitle": "",  # HN 没 description，留空（后续 enrich_og 补）
+            "score": h.get("points", 0),
+            "comments": h.get("num_comments", 0),
         })
-        if len(items) >= limit:
-            break
+    print(f"  [hn] 热榜 {len(items)}/{len(recent)}（门槛 ≥ {MIN_POINTS} points）")
+    return items
     return items
 
 def enrich_summary(items, min_len=100, max_len=400):
@@ -414,7 +443,7 @@ def main():
         try:
             if src["type"] == "rss":
                 items = fetch_rss(src, limit=quota)
-            elif src["type"] == "rss_hn":
+            elif src["type"] in ("rss_hn", "hn_api"):
                 items = fetch_rss_hn(src, limit=quota)
             elif src["type"] == "json_api":
                 items = fetch_json_api(src)[:quota]
