@@ -1,0 +1,109 @@
+{
+  "date": "2026-08-17",
+  "generated_at": "2026-08-17T09:24:06",
+  "total": 10,
+  "sources": [
+    {
+      "source": "qbitai",
+      "label": "量子位",
+      "count": 3
+    },
+    {
+      "source": "solidot",
+      "label": "Solidot",
+      "count": 2
+    },
+    {
+      "source": "thdecoder",
+      "label": "The Decoder",
+      "count": 3
+    },
+    {
+      "source": "hn",
+      "label": "Hacker News",
+      "count": 2
+    }
+  ],
+  "items": [
+    {
+      "source": "qbitai",
+      "label": "量子位",
+      "color": "#FF6B35",
+      "title": "杭州95后小伙，5亿买走硅谷城堡",
+      "url": "https://www.qbitai.com/2026/08/474245.html",
+      "subtitle": "辞别马斯克xAI半年之后…"
+    },
+    {
+      "source": "qbitai",
+      "label": "量子位",
+      "color": "#FF6B35",
+      "title": "李飞飞最新访谈：AI咋能代替人呢？",
+      "url": "https://www.qbitai.com/2026/08/474140.html",
+      "subtitle": "AI不是替代者，而是个人能力的放大镜"
+    },
+    {
+      "source": "qbitai",
+      "label": "量子位",
+      "color": "#FF6B35",
+      "title": "“B站教AI”爆火后，北航90后副教授何静回应一切",
+      "url": "https://www.qbitai.com/2026/08/474064.html",
+      "subtitle": "“错过种一棵树最好的时间”"
+    },
+    {
+      "source": "solidot",
+      "label": "Solidot",
+      "color": "#1F6FEB",
+      "title": "欧洲创纪录热浪杀死了 2.5 万人",
+      "url": "https://www.solidot.org/story?sid=85107",
+      "subtitle": "欧盟哥白尼气候监测服务机构证实，6 月和 7 月是西欧有记录以来最热的月份，在此期间估计有 25000 人死于高温相关疾病。热浪导致欧洲各地河流大范围干涸，这一情况甚至从太空中都可以观察到。由于河流水位极低，商船不得不减少多达 80% 的载货量以避免搁浅。这一迫不得已的举措扰乱了供应链，增加了运输成本。河流干涸还导致二"
+    },
+    {
+      "source": "solidot",
+      "label": "Solidot",
+      "color": "#1F6FEB",
+      "title": "穷人比富人更早出现身体上的老化迹象",
+      "url": "https://www.solidot.org/story?sid=85106",
+      "subtitle": "发表在 PLOS Medicine 期刊上的一项研究显示，穷人比富人更早出现身体上的老化迹象，其中英国贫困人群出现身体机能下降的迹象比同龄富裕人群早 15 年，加拿大则是早 9 年。这项研究涉及了 8500 多名英国参与者以及 22600 多名加拿大参与者的数据，他们的年龄在 50-85 岁之间，参与了 2012-20"
+    },
+    {
+      "source": "thdecoder",
+      "label": "The Decoder",
+      "color": "#9D4EDD",
+      "title": "顶尖数学家说大语言模型是强大的计算器，但缺乏创造性思维",
+      "url": "https://the-decoder.com/top-mathematicians-say-llms-are-strong-calculators-but-poor-creative-thinkers/",
+      "subtitle": "两位著名的数学家蒂莫西·高尔斯（ Timothy Gowers ）和彼得·萨纳克（ Peter Sarnak ）表示，大型语言模型擅长结合已知方法，但缺乏"
+    },
+    {
+      "source": "thdecoder",
+      "label": "The Decoder",
+      "color": "#9D4EDD",
+      "title": "当人工智能模型不被允许反思自己时，它会改变他们的整个世界观",
+      "url": "https://the-decoder.com/when-ai-models-arent-allowed-to-reflect-on-themselves-it-changes-their-entire-worldview/",
+      "subtitle": "一项涉及谷歌研究人员的研究表明，当聊天机器人被训练成不声称有意识时，它也会改变他们对动物权利，宗教，"
+    },
+    {
+      "source": "thdecoder",
+      "label": "The Decoder",
+      "color": "#9D4EDD",
+      "title": "OpenAI解散了为发现灾难性人工智能风险而建立的团队，将其工作重新分配给其他团队",
+      "url": "https://the-decoder.com/openai-dissolved-the-team-built-to-catch-catastrophic-ai-risks-reassigning-its-work-to-other-groups/",
+      "subtitle": "OpenAI关闭了其“备灾”团队，该团队评估了公司自己的人工智能模型是否会带来灾难性风险。该作品已被分配给"
+    },
+    {
+      "source": "hn",
+      "label": "Hacker News",
+      "color": "#FF6600",
+      "title": "直接文件的生死存亡[pdf]",
+      "url": "https://www.ischool.berkeley.edu/sites/default/files/vinton_report_5.pdf",
+      "subtitle": ""
+    },
+    {
+      "source": "hn",
+      "label": "Hacker News",
+      "color": "#FF6600",
+      "title": "第三世界嵌入式工程师回应“他们应该更好地了解RISC-V”",
+      "url": "https://rvembedded.com/blog_post/12/",
+      "subtitle": ""
+    }
+  ]
+}
